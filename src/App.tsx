@@ -1,0 +1,167 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+
+// Layouts
+import { DashboardLayout } from './components/layout/DashboardLayout';
+
+// Auth Pages
+import { LoginPage } from './pages/auth/LoginPage';
+import { RegisterPage } from './pages/auth/RegisterPage';
+
+// Dashboard Pages
+import { EntrepreneurDashboard } from './pages/dashboard/EntrepreneurDashboard';
+import { InvestorDashboard } from './pages/dashboard/InvestorDashboard';
+
+// Profile Pages
+import { EntrepreneurProfile } from './pages/profile/EntrepreneurProfile';
+import { InvestorProfile } from './pages/profile/InvestorProfile';
+
+// Feature Pages
+import { InvestorsPage } from './pages/investors/InvestorsPage';
+import { EntrepreneursPage } from './pages/entrepreneurs/EntrepreneursPage';
+import { MessagesPage } from './pages/messages/MessagesPage';
+import { NotificationsPage } from './pages/notifications/NotificationsPage';
+import { DocumentsPage } from './pages/documents/DocumentsPage';
+import { SettingsPage } from './pages/settings/SettingsPage';
+import { HelpPage } from './pages/help/HelpPage';
+import { DealsPage } from './pages/deals/DealsPage';
+import { SchedulingPage } from './pages/scheduling/SchedulingPage';
+import { VideoCallPage } from './pages/video-call/VideoCallPage';
+import { DocumentChamberPage } from './pages/document-chamber/DocumentChamberPage';
+import { WalletPage } from './pages/wallet/WalletPage';
+import { RoleGuard } from './components/routing/RoleGuard';
+
+// Chat Pages
+import { ChatPage } from './pages/chat/ChatPage';
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* Authentication Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          
+          {/* Dashboard Routes */}
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route
+              path="entrepreneur"
+              element={
+                <RoleGuard allow="entrepreneur">
+                  <EntrepreneurDashboard />
+                </RoleGuard>
+              }
+            />
+            <Route
+              path="investor"
+              element={
+                <RoleGuard allow="investor">
+                  <InvestorDashboard />
+                </RoleGuard>
+              }
+            />
+          </Route>
+          
+          {/* Profile Routes */}
+          <Route path="/profile" element={<DashboardLayout />}>
+            <Route path="entrepreneur/:id" element={<EntrepreneurProfile />} />
+            <Route path="investor/:id" element={<InvestorProfile />} />
+          </Route>
+          
+          {/* Feature Routes */}
+          <Route path="/investors" element={<DashboardLayout />}>
+            <Route
+              index
+              element={
+                <RoleGuard allow="entrepreneur">
+                  <InvestorsPage />
+                </RoleGuard>
+              }
+            />
+          </Route>
+          
+          <Route path="/entrepreneurs" element={<DashboardLayout />}>
+            <Route
+              index
+              element={
+                <RoleGuard allow="investor">
+                  <EntrepreneursPage />
+                </RoleGuard>
+              }
+            />
+          </Route>
+          
+          <Route path="/messages" element={<DashboardLayout />}>
+            <Route index element={<MessagesPage />} />
+          </Route>
+          
+          <Route path="/notifications" element={<DashboardLayout />}>
+            <Route index element={<NotificationsPage />} />
+          </Route>
+          
+          <Route path="/documents" element={<DashboardLayout />}>
+            <Route
+              index
+              element={
+                <RoleGuard allow="entrepreneur">
+                  <DocumentsPage />
+                </RoleGuard>
+              }
+            />
+          </Route>
+          
+          <Route path="/settings" element={<DashboardLayout />}>
+            <Route index element={<SettingsPage />} />
+          </Route>
+          
+          <Route path="/help" element={<DashboardLayout />}>
+            <Route index element={<HelpPage />} />
+          </Route>
+          
+          <Route path="/deals" element={<DashboardLayout />}>
+            <Route
+              index
+              element={
+                <RoleGuard allow="investor">
+                  <DealsPage />
+                </RoleGuard>
+              }
+            />
+          </Route>
+
+          <Route path="/schedule" element={<DashboardLayout />}>
+            <Route index element={<SchedulingPage />} />
+          </Route>
+
+          <Route path="/video-call" element={<DashboardLayout />}>
+            <Route index element={<VideoCallPage />} />
+          </Route>
+
+          <Route path="/document-chamber" element={<DashboardLayout />}>
+            <Route index element={<DocumentChamberPage />} />
+          </Route>
+
+          <Route path="/wallet" element={<DashboardLayout />}>
+            <Route index element={<WalletPage />} />
+          </Route>
+          
+          {/* Chat Routes */}
+          <Route path="/chat" element={<DashboardLayout />}>
+            <Route index element={<ChatPage />} />
+            <Route path=":userId" element={<ChatPage />} />
+          </Route>
+          
+          {/* Redirect root to login */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          
+          {/* Catch all other routes and redirect to login */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
