@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/favicon.ico" alt="Business Nexus Logo" width="80" height="80" />
+<img src="public/logo.svg" alt="Business Nexus Logo" width="80" height="80" />
 
 # 🏢 Business Nexus
 
